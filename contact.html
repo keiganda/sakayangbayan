@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <!-- Basic -->
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <!-- Mobile Metas -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <!-- Site Metas -->
+  <meta name="keywords" content="" />
+  <meta name="description" content="" />
+  <meta name="author" content="" />
+  <link rel="shortcut icon" href="images/jeep-logo.png" type="">
+
+  <title> BE A DRIVER </title>
+
+
+  <!-- bootstrap core css -->
+  <link rel="stylesheet" type="text/css" href="css/bootstrap.css" />
+
+  <!-- fonts style -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
+
+  <!--owl slider stylesheet -->
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" />
+
+  <!-- font awesome style -->
+  <link href="css/font-awesome.min.css" rel="stylesheet" />
+
+  <!-- Custom styles for this template -->
+  <link href="css/style.css" rel="stylesheet" />
+  <!-- responsive style -->
+  <link href="css/responsive.css" rel="stylesheet" />
+
+</head>
+
+<body class="sub_page">
+
+  <div class="hero_area">
+    <!-- header section strats -->
+    <header class="header_section">
+      <div class="header_top">
+        <div class="container-fluid ">
+          <div class="contact_nav">
+            <a href="">
+              <i class="fa fa-phone" aria-hidden="true"></i>
+              <span>
+                Call : +63 9157834084
+              </span>
+            </a>
+            <a href="sakayangbayan@gmail.com">
+              <i class="fa fa-envelope" aria-hidden="true"></i>
+              <span>
+                Email : sakayangbayan@gmail.com
+              </span>
+            </a>
+            <a href="">
+              <i class="fa fa-map-marker" aria-hidden="true"></i>
+              <span>
+                PHILIPPINES
+              </span>
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="header_bottom">
+        <div class="container-fluid">
+          <nav class="navbar navbar-expand-lg custom_nav-container ">
+            <a class="navbar-brand" href="index.html">
+              <span>
+                SAKAYANG BAYAN
+              </span>
+            </a>
+
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+              <span class=""> </span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+              <ul class="navbar-nav  ">
+                <li class="nav-item ">
+                  <a class="nav-link" href="index.html">Home </a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="service.html">Services</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="about.html"> About</a>
+                </li>
+                <li class="nav-item active">
+                  <a class="nav-link" href="contact.html">Be a driver <span class="sr-only">(current)</span> </a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="login.html"> <i class="fa fa-user" aria-hidden="true"></i> Login</a>
+                </li>
+                <!--
+                <form class="form-inline">
+                  <button class="btn  my-2 my-sm-0 nav_search-btn" type="submit">
+                    <i class="fa fa-search" aria-hidden="true"></i>
+                  </button> -->
+                </form>
+              </ul>
+            </div>
+          </nav>
+        </div>
+      </div>
+    </header>
+    <!-- end header section -->
+  </div>
+
+  <!-- contact section -->
+  <section class="contact_section layout_padding-top">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-lg-4 col-md-5 offset-md-1">
+          <div class="heading_container">
+            <h2>
+              BE ONE OF OUR DRIVERS!
+            </h2>
+            <br>
+          </div>
+        </div>
+      </div>
+      </div>
+      
+      <div class="row">
+        <div class="col-lg-4 col-md-5 offset-md-1">
+          <div class="form_container">
+    
+            <form action="/submit-driver-application" method="POST">
+              <!-- Full Name -->
+              <label for="fullName">Full Name:</label>
+              <input type="text" id="fullName" name="fullName" required><br>
+    
+              <!-- Email Address -->
+              <label for="email">Email Address:</label>
+              <input type="email" id="email" name="email" required><br>
+    
+              <!-- Phone Number -->
+              <label for="phone">Phone Number:</label>
+              <input type="tel" id="phone" name="phone" required><br>
+    
+              <!-- Vehicle Type -->
+              <label for="vehicleType">Vehicle Type:</label>
+              <select id="vehicleType" name="vehicleType" onchange="showVehicleFields(this)" required>
+                <option value="">-- Select Vehicle Type --</option>
+                <option value="jeepney">Jeepney 🚙</option>
+                <option value="taxi">Taxi 🚖</option>
+                <option value="bus">Bus 🚍</option>
+                <option value="motor">Motorcycle 🏍️</option> <!-- Added Motorcycle -->
+              </select><br>
+    
+              <!-- Vehicle Details (Dynamic) -->
+              <div id="vehicleDetails"></div>
+    
+              <!-- License Number -->
+              <label for="licenseNumber">Driver's License Number:</label>
+              <input type="text" id="licenseNumber" name="licenseNumber" required><br>
+    
+              <!-- Submit Button -->
+              <button class="alert-button" onclick="validateForm()" type="submit">Submit Application</button>
+              <script>
+                function showAlert() {
+                  alert('Application has been submitted!');
+                }
+              </script>
+            </form>
+          </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- JavaScript for form validation -->
+  <script>
+    function validateForm() {
+      const form = document.getElementById('driverApplicationForm');
+      const fullName = document.getElementById('fullName').value;
+      const email = document.getElementById('email').value;
+      const phone = document.getElementById('phone').value;
+      const vehicleType = document.getElementById('vehicleType').value;
+      const licenseNumber = document.getElementById('licenseNumber').value;
+
+      // Check if any required field is empty
+      if (!fullName || !email || !phone || !vehicleType || !licenseNumber) {
+        alert('Please fill out all required fields!');
+        return false;
+      }
+
+      // All fields are filled, show a confirmation alert
+      alert('Application has been submitted!');
+      form.submit(); // Actually submit the form if everything is filled
+    }
+  </script>
+    
+      <!--  Bootstrap JS and Popper.js -->
+      <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.1/dist/umd/popper.min.js"></script>
+      <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    
+      <!-- JavaScript  -->
+      <script>
+        // Function to dynamically show additional fields based on vehicle type
+        function showVehicleFields(select) {
+          const vehicleDetails = document.getElementById('vehicleDetails');
+          const vehicleType = select.value;
+          
+          // Clear any existing fields
+          vehicleDetails.innerHTML = '';
+    
+          if (vehicleType === 'jeepney') {
+            vehicleDetails.innerHTML = `
+              <label for="jeepneyPermit">Jeepney Franchise/Permit Number:</label>
+              <input type="text" id="jeepneyPermit" name="jeepneyPermit" required><br>
+              <label for="jeepneyCapacity">Jeepney Capacity (Seats):</label>
+              <input type="number" id="jeepneyCapacity" name="jeepneyCapacity" required><br>
+            `;
+          } else if (vehicleType === 'taxi') {
+            vehicleDetails.innerHTML = `
+              <label for="taxiPlateNumber">Taxi Plate Number:</label>
+              <input type="text" id="taxiPlateNumber" name="taxiPlateNumber" required><br>
+              <label for="taxiPermit">Taxi Franchise/Permit Number:</label>
+              <input type="text" id="taxiPermit" name="taxiPermit" required><br>
+            `;
+          } else if (vehicleType === 'bus') {
+            vehicleDetails.innerHTML = `
+              <label for="busPermit">Bus Franchise/Permit Number:</label>
+              <input type="text" id="busPermit" name="busPermit" required><br>
+              <label for="busCapacity">Bus Capacity (Seats):</label>
+              <input type="number" id="busCapacity" name="busCapacity" required><br>
+            `;
+          } else if (vehicleType === 'van') {
+            vehicleDetails.innerHTML = `
+              <label for="vanPlateNumber">Van Plate Number:</label>
+              <input type="text" id="vanPlateNumber" name="vanPlateNumber" required><br>
+              <label for="vanCapacity">Van Capacity (Seats):</label>
+              <input type="number" id="vanCapacity" name="vanCapacity" required><br>
+            `;
+          } else if (vehicleType === 'motor') { // Motorcycle
+            vehicleDetails.innerHTML = `
+              <label for="motorcyclePlateNumber">Motorcycle Plate Number:</label>
+              <input type="text" id="motorcyclePlateNumber" name="motorcyclePlateNumber" required><br>
+              <label for="motorcycleModel">Motorcycle Model:</label>
+              <input type="text" id="motorcycleModel" name="motorcycleModel" required><br>
+            `;
+          }
+        }
+      </script>
+    
+      </section>
+
+
+      <!--
+      <div class="row">
+        <div class="col-lg-4 col-md-5 offset-md-1">
+          <div class="form_container">
+            <form action="">
+              <div>
+                <input type="text" placeholder="Your Name" />
+              </div>
+              <div>
+                <input type="text" placeholder="Phone Number" />
+              </div>
+              <div>
+                <input type="email" placeholder="Email" />
+              </div>
+              <div>
+                <input type="text" class="message-box" placeholder="Message" />
+              </div>
+              <div class="btn_box">
+                <button>
+                  SEND
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+    </div>
+  </section>
+   end contact section -->
+
+  <!-- info section -->
+  
+  <br>
+  <br>
+  <br>
+  <section class="info_section layout_padding2">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6 col-lg-3 info_col">
+          <div class="info_contact">
+            <h4>
+              Address
+            </h4>
+            <div class="contact_link_box">
+              <a href="">
+                <i class="fa fa-map-marker" aria-hidden="true"></i>
+                <span>
+                  PHILIPPINES
+                </span>
+              </a>
+              <a href="">
+                <i class="fa fa-phone" aria-hidden="true"></i>
+                <span>
+                  Call +63 9157834084
+                </span>
+              </a>
+              <a href="sakayangbayan@gmail.com">
+                <i class="fa fa-envelope" aria-hidden="true"></i>
+                <span>
+                  sakayangbayan@gmail.com
+                </span>
+              </a>
+            </div>
+          </div>
+          <div class="info_social">
+            <a href="https://www.facebook.com/share/1FVxan2t48/?mibextid=wwXIfr">
+              <i class="fa fa-facebook" aria-hidden="true"></i>
+            </a>
+            <a href="https://twitter.com/?lang=en">
+              <i class="fa fa-twitter" aria-hidden="true"></i>
+            </a>
+            <a href="https://www.linkedin.com/login">
+              <i class="fa fa-linkedin" aria-hidden="true"></i>
+            </a>
+            <a href="https://www.instagram.com/">
+              <i class="fa fa-instagram" aria-hidden="true"></i>
+            </a>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-3 info_col">
+          <div class="info_detail">
+            <h4>
+              Info
+            </h4>
+            <p>
+              Our website offers a variety of transportation services, from public vehicles like jeepneys and buses to personal options such as motorcycles. With our user-friendly platform, booking rides or tracking shipments is a breeze. Join us for a convenient and hassle-free travel experience!            </p>
+            </p>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-2 mx-auto info_col">
+          <div class="info_link_box">
+            <h4>
+              Links
+            </h4>
+            <div class="info_links">
+              <a class="active" href="index.html">
+                <img src="images/nav-bullet.png" alt="">
+                Home
+              </a>
+              <a class="" href="about.html">
+                <img src="images/nav-bullet.png" alt="">
+                About
+              </a>
+              <a class="" href="service.html">
+                <img src="images/nav-bullet.png" alt="">
+                Services
+              </a>
+
+              <a class="" href="contact.html">
+                <img src="images/nav-bullet.png" alt="">
+                Apply Now
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-3 info_col ">
+          <h4>
+            Receive Updates
+          </h4>
+          <form action="#">
+            <input type="text" placeholder="Enter email" />
+            <button type="submit">
+              Subscribe
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- end info section -->
+
+  <!-- footer section -->
+  <section class="footer_section">
+    <div class="container">
+      <p>
+        &copy; <span id="displayYear"></span> All Rights Reserved
+      </p>
+    </div>
+  </section>
+  <!-- footer section -->
+
+  <!-- jQery -->
+  <script type="text/javascript" src="js/jquery-3.4.1.min.js"></script>
+  <!-- popper js -->
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous">
+  </script>
+  <!-- bootstrap js -->
+  <script type="text/javascript" src="js/bootstrap.js"></script>
+  <!-- owl slider -->
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js">
+  </script>
+  <!-- custom js -->
+  <script type="text/javascript" src="js/custom.js"></script>
+  <!-- Google Map -->
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCh39n5U-4IoWpsVGUHWdqB6puEkhRLdmI&callback=myMap">
+  </script>
+  <!-- End Google Map -->
+
+</body>
+
+</html>

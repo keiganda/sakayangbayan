@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <!-- Basic -->
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <!-- Mobile Metas -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <!-- Site Metas -->
+  <meta name="keywords" content="" />
+  <meta name="description" content="" />
+  <meta name="author" content="" />
+  <link rel="shortcut icon" href="images/jeep-logo.png" type="">
+
+  <title> TAXI BOOKING </title>
+
+
+  <!-- bootstrap core css -->
+  <link rel="stylesheet" type="text/css" href="css/bootstrap.css" />
+
+  <!-- fonts style -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
+
+  <!--owl slider stylesheet -->
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" />
+
+  <!-- font awesome style -->
+  <link href="css/font-awesome.min.css" rel="stylesheet" />
+
+  <!-- Custom styles for this template -->
+  <link href="css/style.css" rel="stylesheet" />
+  <!-- responsive style -->
+  <link href="css/responsive.css" rel="stylesheet" />
+
+</head>
+
+<body class="sub_page">
+
+  <div class="hero_area">
+    <!-- header section strats -->
+    <header class="header_section">
+      <div class="header_top">
+        <div class="container-fluid ">
+          <div class="contact_nav">
+            <a href="">
+              <i class="fa fa-phone" aria-hidden="true"></i>
+              <span>
+                Call : +63 9157834084
+              </span>
+            </a>
+            <a href="sakayangbayan@gmail.com">
+              <i class="fa fa-envelope" aria-hidden="true"></i>
+              <span>
+                Email : sakayangbayan@gmail.com
+              </span>
+            </a>
+            <a href="">
+              <i class="fa fa-map-marker" aria-hidden="true"></i>
+              <span>
+                PHILIPPINES
+              </span>
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="header_bottom">
+        <div class="container-fluid">
+          <nav class="navbar navbar-expand-lg custom_nav-container ">
+            <a class="navbar-brand" href="index.html">
+              <span>
+                SAKAYANG BAYAN
+              </span>
+            </a>
+
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+              <span class=""> </span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+              <ul class="navbar-nav  ">
+                <li class="nav-item ">
+                  <a class="nav-link" href="index.html">Home </a>
+                </li>
+                <li class="nav-item active">
+                  <a class="nav-link" href="service.html">Services</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="about.html"> About</a>
+                </li>
+                <li class="nav-item ">
+                  <a class="nav-link" href="contact.html">Be a driver <span class="sr-only">(current)</span> </a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="login.html"> <i class="fa fa-user" aria-hidden="true"></i> Login</a>
+                </li>
+                <form class="form-inline">
+                  <button class="btn  my-2 my-sm-0 nav_search-btn" type="submit">
+                    <i class="fa fa-search" aria-hidden="true"></i>
+                  </button>
+                </form>
+              </ul>
+            </div>
+          </nav>
+        </div>
+      </div>
+    </header>
+    <!-- end header section -->
+  </div>
+
+  <section class="contact_section layout_padding-top">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-lg-4 col-md-5 offset-md-1">
+          <div class="heading_container">
+            <h2>
+              Taxi Booking
+            </h2>
+          </div>
+        </div>
+      </div>
+
+  <style>
+    #map {
+      height: 500px;
+      width: 80%;
+      margin-top: 10px;
+      border-radius: 5%;    
+    }
+    input, button {
+      margin: 5px;
+      padding: 8px;
+      width: 220px;
+    }
+    #fare-info {
+      margin: 10px;
+      font-weight: bold;
+    }
+    #book-btn {
+      display: none;
+      background-color: #23242a;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    #book-btn:hover {
+      background-color: #218838;
+    }
+  </style>
+
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+</head>
+<body>
+
+
+<input id="pickup" type="text" placeholder="Enter Pickup Location">
+<input id="destination" type="text" placeholder="Enter Destination">
+<button onclick="geocodeLocations()">Search Location</button>
+
+<div id="fare-info"></div>
+<button id="book-btn" onclick="bookNow()">Book Now</button>
+
+<div id="map"></div>
+
+<!-- Leaflet JS -->
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+<script>
+  const map = L.map('map').setView([12.8797, 121.7740], 6);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; OpenStreetMap contributors'
+  }).addTo(map);
+
+  let markers = [];
+  let routeLine = null;
+  let fareInfo = {};
+
+  function geocodeLocations() {
+    const pickup = document.getElementById("pickup").value;
+    const destination = document.getElementById("destination").value;
+
+    if (!pickup || !destination) {
+      alert("Please enter both Pickup and Destination.");
+      return;
+    }
+
+    // Clear existing
+    markers.forEach(m => map.removeLayer(m));
+    markers = [];
+    if (routeLine) {
+      map.removeLayer(routeLine);
+      routeLine = null;
+    }
+    document.getElementById("fare-info").innerText = "";
+    document.getElementById("book-btn").style.display = "none";
+
+    Promise.all([
+      geocode(pickup, "Pickup"),
+      geocode(destination, "Destination")
+    ]).then(results => {
+      if (results[0] && results[1]) {
+        drawRoute(results[0], results[1], pickup, destination);
+        const group = new L.featureGroup(markers);
+        map.fitBounds(group.getBounds().pad(0.5));
+      }
+    });
+  }
+
+  function geocode(query, label) {
+    const url = `https://nominatim.openstreetmap.org/search?format=json&countrycodes=ph&q=${encodeURIComponent(query)}`;
+    return fetch(url)
+      .then(res => res.json())
+      .then(data => {
+        if (data.length > 0) {
+          const lat = parseFloat(data[0].lat);
+          const lon = parseFloat(data[0].lon);
+          const marker = L.marker([lat, lon]).addTo(map)
+            .bindPopup(`<b>${label}</b>: ${query}`).openPopup();
+          markers.push(marker);
+          return [lat, lon];
+        } else {
+          alert(`Location not found: ${label}`);
+          return null;
+        }
+      });
+  }
+
+  function drawRoute(start, end, pickupLabel, destinationLabel) {
+    const url = `https://router.project-osrm.org/route/v1/driving/${start[1]},${start[0]};${end[1]},${end[0]}?overview=full&geometries=geojson`;
+    fetch(url)
+      .then(res => res.json())
+      .then(data => {
+        if (data.routes && data.routes.length > 0) {
+          const route = data.routes[0];
+          const coords = route.geometry.coordinates;
+          const latlngs = coords.map(coord => [coord[1], coord[0]]);
+          routeLine = L.polyline(latlngs, { color: 'blue', weight: 5 }).addTo(map);
+
+          const distanceKm = (route.distance / 1000).toFixed(2);
+          const baseFare = 60;
+          const perKmRate = 15;
+          const estimatedFare = (baseFare + (distanceKm * perKmRate)).toFixed(2);
+
+          document.getElementById("fare-info").innerText =
+            `🛣 Distance: ${distanceKm} km | 💸 Estimated Fare: ₱${estimatedFare}`;
+          document.getElementById("book-btn").style.display = "inline-block";
+
+          // Store for booking
+          fareInfo = {
+            pickup: pickupLabel,
+            destination: destinationLabel,
+            distanceKm,
+            estimatedFare
+          };
+        }
+      });
+  }
+
+  function bookNow() {
+    alert(`✅ Booking Confirmed!\n\nFrom: ${fareInfo.pickup}\nTo: ${fareInfo.destination}\nDistance: ${fareInfo.distanceKm} km\nFare: ₱${fareInfo.estimatedFare}`);
+    // Optional: send data to server or open a form
+  }
+</script>
+
+  <!-- contact section 
+  <section class="contact_section layout_padding-top">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-lg-4 col-md-5 offset-md-1">
+          <div class="heading_container">
+            <h2>
+              Jeepney Booking
+            </h2>
+          </div>
+        </div>
+      </div> -->
+
+<!-- 
+      <div class="row">
+        <div class="col-lg-4 col-md-5 offset-md-1">
+          <div class="form_container">
+            <form action="">
+              <div>
+                <input type="text" placeholder="Destination Drop-Off" />
+              </div>
+              <div>
+                <input type="text" placeholder="Pick-Up Location" />
+              </div>
+              <div>
+                <input type="text" class="message-box" placeholder="Message driver" />
+              </div>
+              <div class="btn_box">
+                <button>
+                  Book
+                </button>
+              </div>
+            </form>
+          </div> -->
+        </div>
+        <!--
+        <div class="col-lg-7 col-md-6 px-0">
+          <div class="map_container">
+            <div class="map">
+              <div id="googleMap"></div> -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- end contact section -->
+
+  <!-- info section -->
+
+  <section class="info_section layout_padding2">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6 col-lg-3 info_col">
+          <div class="info_contact">
+            <h4>
+              Address
+            </h4>
+            <div class="contact_link_box">
+              <a href="">
+                <i class="fa fa-map-marker" aria-hidden="true"></i>
+                <span>
+                  PHILIPPINES
+                </span>
+              </a>
+              <a href="">
+                <i class="fa fa-phone" aria-hidden="true"></i>
+                <span>
+                  Call +63 9157834084
+                </span>
+              </a>
+              <a href="sakayangbayan@gmail.com">
+                <i class="fa fa-envelope" aria-hidden="true"></i>
+                <span>
+                  sakayangbayan@gmail.com
+                </span>
+              </a>
+            </div>
+          </div>
+          <div class="info_social">
+            <a href="https://www.facebook.com/share/1FVxan2t48/?mibextid=wwXIfr">
+              <i class="fa fa-facebook" aria-hidden="true"></i>
+            </a>
+            <a href="https://twitter.com/?lang=en">
+              <i class="fa fa-twitter" aria-hidden="true"></i>
+            </a>
+            <a href="https://www.linkedin.com/login">
+              <i class="fa fa-linkedin" aria-hidden="true"></i>
+            </a>
+            <a href="https://www.instagram.com/">
+              <i class="fa fa-instagram" aria-hidden="true"></i>
+            </a>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-3 info_col">
+          <div class="info_detail">
+            <h4>
+              Info
+            </h4>
+            <p>
+                Our website offers a variety of transportation services, from public vehicles like jeepneys and buses to personal options such as motorcycles. With our user-friendly platform, booking rides or tracking shipments is a breeze. Join us for a convenient and hassle-free travel experience!            </p>
+            </p>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-2 mx-auto info_col">
+          <div class="info_link_box">
+            <h4>
+              Links
+            </h4>
+            <div class="info_links">
+              <a class="active" href="index.html">
+                <img src="images/nav-bullet.png" alt="">
+                Home
+              </a>
+              <a class="" href="about.html">
+                <img src="images/nav-bullet.png" alt="">
+                About
+              </a>
+              <a class="" href="service.html">
+                <img src="images/nav-bullet.png" alt="">
+                Services
+              </a>
+
+              <a class="" href="contact.html">
+                <img src="images/nav-bullet.png" alt="">
+                Apply Now
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-3 info_col ">
+          <h4>
+            Receive Updates
+          </h4>
+          <form action="#">
+            <input type="text" placeholder="Enter email" />
+            <button type="submit">
+              Subscribe
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- end info section -->
+
+  <!-- footer section -->
+  <section class="footer_section">
+    <div class="container">
+      <p>
+        &copy; <span id="displayYear"></span> All Rights Reserved
+      </p>
+    </div>
+  </section>
+  <!-- footer section -->
+
+  <!-- jQery -->
+  <script type="text/javascript" src="js/jquery-3.4.1.min.js"></script>
+  <!-- popper js -->
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous">
+  </script>
+  <!-- bootstrap js -->
+  <script type="text/javascript" src="js/bootstrap.js"></script>
+  <!-- owl slider -->
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js">
+  </script>
+  <!-- custom js -->
+  <script type="text/javascript" src="js/custom.js"></script>
+  <!-- Google Map -->
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCh39n5U-4IoWpsVGUHWdqB6puEkhRLdmI&callback=myMap">
+  </script>
+  <!-- End Google Map -->
+
+</body>
+
+</html>
